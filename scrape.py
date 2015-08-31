@@ -41,15 +41,21 @@ def download_photo(img_url, filename):
 		return False
 	return True
 
+# Gets full-res source if available
+def get_image_src(img):
+	if img.parent.name == 'a':
+		return img.parent.get('href')
+	else:
+		return img.get('src')
+
 # Gets the first image on the page and downloads it
 def download_photos_from_html(urlList, url_prepend=""):
 	for link in urlList:
 		url = url_prepend + link
 		soup = parse_html(url)
-		img = soup.find('img')
-		href = img.parent.get('href')
-		savename = href[href.rfind("/")+1:]
-		download_photo("http://apod.nasa.gov/apod/" + href, savename)
+		src = get_image_src(soup.find('img'))
+		savename = href[src.rfind("/")+1:]
+		download_photo("http://apod.nasa.gov/apod/" + src, savename)
 
 def get_metadata_from_html(urlList, url_prepend=""):
 	allMetaData = []
@@ -63,9 +69,8 @@ def get_metadata_from_html(urlList, url_prepend=""):
 			title = soup.find('title').string
 			date = title[7:title.find("-")-1]
 			name = title[title.find("-")+2:].replace("\n","").strip()
-			soup.find('img').parent.get('href')
-			href = soup.find('img').parent.get('href')
-			savename = href[href.rfind("/")+1:]
+			src = get_image_src(soup.find('img'))
+			savename = src[src.rfind("/")+1:]
 		except:
 			print("couldn't get all metadata for " + link)
 		allMetaData.append([date, name, savename, link])
