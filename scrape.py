@@ -48,14 +48,19 @@ def get_image_src(img):
 	else:
 		return img.get('src')
 
+def trim_image_filename(imgSrc):
+	return imgSrc[imgSrc.rfind("/")+1:]
+
 # Gets the first image on the page and downloads it
 def download_photos_from_html(urlList, url_prepend=""):
 	for link in urlList:
 		url = url_prepend + link
 		soup = parse_html(url)
-		src = get_image_src(soup.find('img'))
-		savename = href[src.rfind("/")+1:]
-		download_photo("http://apod.nasa.gov/apod/" + src, savename)
+		img = soup.find('img')
+		if img is not None:
+			src = get_image_src(img)
+			savename = trim_image_filename(src)
+			download_photo("http://apod.nasa.gov/apod/" + src, savename)
 
 def get_metadata_from_html(urlList, url_prepend=""):
 	allMetaData = []
@@ -65,14 +70,12 @@ def get_metadata_from_html(urlList, url_prepend=""):
 		date = ""
 		name = ""
 		savename = ""
-		try:
-			title = soup.find('title').string
-			date = title[7:title.find("-")-1]
-			name = title[title.find("-")+2:].replace("\n","").strip()
-			src = get_image_src(soup.find('img'))
-			savename = src[src.rfind("/")+1:]
-		except:
-			print("couldn't get all metadata for " + link)
+		title = soup.find('title').string
+		date = title[7:title.find("-")-1]
+		name = title[title.find("-")+2:].replace("\n","").strip()
+		image = soup.find('img')
+		if image is not None:
+			savename = trim_image_filename(get_image_src())
 		allMetaData.append([date, name, savename, link])
 		# print(linkMetaData)
 	return allMetaData
