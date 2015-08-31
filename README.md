@@ -3,7 +3,7 @@ Astronomy Photo of the Day Web Scraper
 
 Requires BeautifulSoup (http://www.crummy.com/software/BeautifulSoup/)
 
-Will download all of the full-res photos from http://apod.nasa.gov/apod/archivepix.html and generate a CSV with metadata.
+Will download all of the full-res photos (>5GB of data, as of 8-31-15) from http://apod.nasa.gov/apod/archivepix.html and generate a CSV with metadata.
 
 Relies on a couple of assumptions:
 - Astronomy photo is always the first image on the page
