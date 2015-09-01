@@ -43,7 +43,7 @@ def download_photo(img_url, filename):
 
 # Gets full-res source if available
 def get_image_src(img):
-	if img.parent.name == 'a':
+	if img.parent.name == 'a' and img.parent.get('href') != '#':
 		return img.parent.get('href')
 	else:
 		return img.get('src')
