@@ -75,7 +75,7 @@ def get_metadata_from_html(urlList, url_prepend=""):
 		name = title[title.find("-")+2:].replace("\n","").strip()
 		image = soup.find('img')
 		if image is not None:
-			savename = trim_image_filename(get_image_src())
+			savename = trim_image_filename(get_image_src(image))
 		allMetaData.append([date, name, savename, link])
 		# print(linkMetaData)
 	return allMetaData
